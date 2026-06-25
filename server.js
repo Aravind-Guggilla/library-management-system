@@ -4,6 +4,8 @@ const cors = require("cors");
 
 dotenv.config();
 
+const {initializeDB} = require('./src/config/db')
+
 const app = express();
 
 app.use(cors());
@@ -15,6 +17,22 @@ app.get("/", (request, response) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-    console.log(`Server Running at http://localhost:${PORT}`);
-});
+const initializeServer = async () => {
+  try {
+    await initializeDB()
+
+    console.log('PostgreSQL Connected Successfully')
+
+    app.listen(process.env.PORT, () => {
+      console.log(`Server Running at http://localhost:${process.env.PORT}/`)
+    })
+  } catch (error) {
+    console.log(`DB Error: ${error.message}`)
+
+    process.exit(1)
+  }
+}
+
+initializeServer()
+
+module.exports = app
