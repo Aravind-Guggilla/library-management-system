@@ -5,7 +5,7 @@ const cors = require("cors");
 dotenv.config();
 
 const {initializeDB} = require('./src/config/db')
-
+const authenticateToken = require('./src/middleware/authMiddleware')
 const authRoutes = require('./src/routes/authRoutes')
 
 const app = express();
