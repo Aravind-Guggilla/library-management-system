@@ -1,4 +1,4 @@
-const { addBook, getBookByISBN, getAllBooks, getBookById } = require("../services/bookService");
+const { addBook, getBookByISBN, getAllBooks, getBookById, updateBook, deleteBook} = require("../services/bookService");
 
 const createBook = async (request, response) => {
 
@@ -52,8 +52,64 @@ const fetchBookById = async (request, response) =>{
     }
 }
 
+const editBook = async (request, response) => {
+
+    try {
+
+        const { id } = request.params;
+
+        const existingBook = await getBookById(id);
+
+        if (existingBook === undefined) {
+            return response.status(404).json({
+                error: "Book not found"
+            });
+        }
+
+        await updateBook(id, request.body);
+
+        response.status(200).json({message: "Book Updated Successfully"});
+
+    } catch (error) {
+        response.status(500).json({error: "Internal Server Error"});
+    }
+
+};
+
+const removeBook = async (request, response) => {
+
+    try {
+
+        const { id } = request.params;
+
+        const book = await getBookById(id);
+
+        if (book === undefined) {
+            return response.status(404).json({
+                error: "Book not found"
+            });
+        }
+
+        if (book.quantity !== book.available_quantity) {
+            return response.status(400).json({
+                error: "Book is currently borrowed and cannot be deleted"
+            });
+        }
+
+        await deleteBook(id);
+
+        response.status(200).json({message: "Book Deleted Successfully"});
+
+    } catch (error) {
+        response.status(500).json({error: "Internal Server Error"});
+    }
+
+};
+
 module.exports = {
     createBook,
     fetchAllBooks,
-    fetchBookById
+    fetchBookById,
+    editBook,
+    removeBook
 };

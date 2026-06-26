@@ -79,9 +79,54 @@ const getBookById = async (id) => {
     return result.rows[0];
 };
 
+const updateBook = async (id, bookDetails) => {
+
+    const db = getDB();
+
+    const {title, author, isbn, category, quantity} = bookDetails;
+
+    const existingBook = await getBookById(id);
+    
+
+    const borrowedBooks = existingBook.quantity - existingBook.available_quantity;
+
+    const availableQuantity = quantity - borrowedBooks;
+
+    const query = `
+        UPDATE books
+        SET
+            title = $1,
+            author = $2,
+            isbn = $3,
+            category = $4,
+            quantity = $5,
+            available_quantity = $6
+        WHERE id = $7
+    `;
+
+    const values = [title, author, isbn, category, quantity, availableQuantity, id];
+
+    await db.query(query, values);
+};
+
+const deleteBook = async (id) => {
+
+    const db = getDB();
+
+    const query = `
+        DELETE FROM books
+        WHERE id = $1
+    `;
+
+    await db.query(query, [id]);
+
+};
+
 module.exports = {
     addBook,
     getBookByISBN,
     getAllBooks,
-    getBookById
+    getBookById,
+    updateBook,
+    deleteBook
 };
