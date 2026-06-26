@@ -5,8 +5,10 @@ const cors = require("cors");
 dotenv.config();
 
 const {initializeDB} = require('./src/config/db')
-const authenticateToken = require('./src/middleware/authMiddleware')
+
+
 const authRoutes = require('./src/routes/authRoutes')
+const bookRoutes = require("./src/routes/bookRoutes");
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.use(express.json());
 
 //Routes
 app.use('/api/auth', authRoutes)
+app.use('/api/books', bookRoutes);
+
 
 app.get("/", (request, response) => {
     response.send("Library Management System API");

@@ -4,7 +4,7 @@ POST http://localhost:5000/api/auth/register
 Content-Type: application/json
 
 {
-    "name":"Aravind",
+    "name":"aravind",
     "email":"aravind@gmail.com",
     "password":"123456"
 }
@@ -17,4 +17,30 @@ Content-Type: application/json
 {
     "email":"aravind@gmail.com",
     "password":"123456"
+}
+
+###
+// Login as a librarian
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+    "email":"ashwith@gmail.com",
+    "password":"123456789"
+}
+
+
+###
+//Create a new book (Requires librarian role) with Authorization header
+POST http://localhost:5000/api/books/add
+Content-Type: application/json  
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoiYXNod2l0aEBnbWFpbC5jb20iLCJyb2xlIjoibGlicmFyaWFuIiwiaWF0IjoxNzgyNDY3MDY5fQ.oT_XaTmlCntmX_HvyRHaXimZDmkf6XhGzzQySb9rc68
+
+{
+    "title":"Atomic Habits",
+    "author":"James Clear",
+    "isbn":"9780735211292",
+    "category":"Self Help",
+    "quantity":10,
+    "availableQuantity":10
 }

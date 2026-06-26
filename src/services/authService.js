@@ -9,7 +9,7 @@ const registerUser = async ({ name, email, hashedPassword }) => {
         RETURNING id
     `;
 
-    const values = [name, email, hashedPassword, "member"];
+    const values = [name, email, hashedPassword,"member"];
 
     const result = await db.query(query, values);
 
