@@ -1,4 +1,4 @@
-const { addBook, getBookByISBN, allBooks } = require("../services/bookService");
+const { addBook, getBookByISBN, getAllBooks, getBookById } = require("../services/bookService");
 
 const createBook = async (request, response) => {
 
@@ -23,9 +23,9 @@ const createBook = async (request, response) => {
 
 };
 
-const getAllBooks = async (request, response) => {
+const fetchAllBooks = async (request, response) => {
     try{
-        const books = await allBooks()
+        const books = await getAllBooks()
         response.status(200).json(books)
     }catch(error){
         response.status(500).json({error: "Internal Server Error"});
@@ -33,7 +33,27 @@ const getAllBooks = async (request, response) => {
     
 }
 
+const fetchBookById = async (request, response) =>{
+
+    try {
+
+        const { id } = request.params;
+
+        const book = await getBookById(id);
+
+        if (book === undefined) {
+            return response.status(404).json({error: "Book not found"});
+        }
+
+        response.status(200).json(book);
+
+    } catch (error) {
+        response.status(500).json({error: "Internal Server Error"});
+    }
+}
+
 module.exports = {
     createBook,
-    getAllBooks
+    fetchAllBooks,
+    fetchBookById
 };

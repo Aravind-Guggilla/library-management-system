@@ -47,7 +47,7 @@ const addBook = async (bookDetails) => {
     return result.rows[0];
 };
 
-const allBooks = async () => {
+const getAllBooks = async () => {
 
     const db = getDB();
 
@@ -64,8 +64,24 @@ const allBooks = async () => {
     return result.rows;
 };
 
+const getBookById = async (id) => {
+
+    const db = getDB();
+
+    const query = `
+        SELECT *
+        FROM books
+        WHERE id = $1
+    `;
+
+    const result = await db.query(query, [id]);
+
+    return result.rows[0];
+};
+
 module.exports = {
     addBook,
     getBookByISBN,
-    allBooks
+    getAllBooks,
+    getBookById
 };
