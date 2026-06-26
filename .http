@@ -44,3 +44,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtY
     "quantity":10,
     "availableQuantity":10
 }
+
+
+###
+//GET all books
+GET http://localhost:5000/api/books/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImVtYWlsIjoiYXNod2l0aEBnbWFpbC5jb20iLCJyb2xlIjoibGlicmFyaWFuIiwiaWF0IjoxNzgyNDY3MDY5fQ.oT_XaTmlCntmX_HvyRHaXimZDmkf6XhGzzQySb9rc68

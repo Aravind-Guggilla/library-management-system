@@ -17,7 +17,7 @@ app.use(express.json());
 
 //Routes
 app.use('/api/auth', authRoutes)
-app.use('/api/books', bookRoutes);
+app.use('/api', bookRoutes);
 
 
 app.get("/", (request, response) => {

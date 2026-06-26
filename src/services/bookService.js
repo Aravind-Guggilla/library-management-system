@@ -1,5 +1,19 @@
 const { getDB } = require("../config/db");
 
+const getBookByISBN = async (isbn) => {
+    const db = getDB();
+
+    const query = `
+        SELECT *
+        FROM books
+        WHERE isbn = $1
+    `;
+
+    const result = await db.query(query, [isbn]);
+
+    return result.rows[0];
+};
+
 const addBook = async (bookDetails) => {
     const db = getDB();
 
@@ -33,6 +47,25 @@ const addBook = async (bookDetails) => {
     return result.rows[0];
 };
 
+const allBooks = async () => {
+
+    const db = getDB();
+
+    const query = `
+        SELECT 
+           *
+        FROM 
+            books
+        ORDER BY id;
+    `;
+
+    const result = await db.query(query);
+
+    return result.rows;
+};
+
 module.exports = {
-    addBook
+    addBook,
+    getBookByISBN,
+    allBooks
 };

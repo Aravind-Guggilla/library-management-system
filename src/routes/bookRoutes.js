@@ -5,8 +5,9 @@ const router = express.Router();
 const authenticateToken = require("../middleware/authMiddleware");
 const authorizeRole = require("../middleware/roleMiddleware");
 
-const {createBook} = require("../controllers/bookController");
+const {createBook, getAllBooks} = require("../controllers/bookController");
 
-router.post("/add", authenticateToken, authorizeRole("librarian"), createBook);
+router.post("/books/add", authenticateToken, authorizeRole("librarian"), createBook);
+router.get("/books", authenticateToken, getAllBooks)
 
 module.exports = router;
