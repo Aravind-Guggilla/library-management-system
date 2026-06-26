@@ -9,6 +9,7 @@ const {initializeDB} = require('./src/config/db')
 
 const authRoutes = require('./src/routes/authRoutes')
 const bookRoutes = require("./src/routes/bookRoutes");
+const memberRoutes = require("./src/routes/memberRoutes");
 
 const app = express();
 
@@ -18,7 +19,7 @@ app.use(express.json());
 //Routes
 app.use('/api/auth', authRoutes)
 app.use('/api', bookRoutes);
-
+app.use("/api/members", memberRoutes);
 
 app.get("/", (request, response) => {
     response.send("Library Management System API");
