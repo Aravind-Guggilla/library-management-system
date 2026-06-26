@@ -1,6 +1,6 @@
 # Library Management System - Backend
 
-<!-- Live URl =  https://library-management-system-huh0.onrender.com/ -->
+Live URl =  https://library-management-system-huh0.onrender.com/
 ## Overview
 
 The **Library Management System** is a RESTful backend application built using **Node.js**, **Express.js**, and **Neon PostgreSQL**. It provides secure authentication using JWT, role-based authorization, book management, member management, and book borrowing/return functionality.
