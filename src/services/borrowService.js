@@ -89,6 +89,30 @@ const increaseAvailableQuantity = async (bookId) => {
     await db.query(query, [bookId]);
 };
 
+const getMyBorrowedBooks = async (memberId) => {
+
+    const db = getDB();
+
+    const query = `
+        SELECT
+            books.id,
+            books.title,
+            books.author,
+            books.isbn,
+            books.category,
+            borrow_records.borrow_date
+        FROM borrow_records
+        INNER JOIN books
+        ON borrow_records.book_id = books.id
+        WHERE borrow_records.member_id = $1
+        AND borrow_records.status = 'borrowed'
+        ORDER BY borrow_records.borrow_date DESC;
+    `;
+
+    const result = await db.query(query, [memberId]);
+
+    return result.rows;
+};
 
 module.exports = {
     getBookById,
