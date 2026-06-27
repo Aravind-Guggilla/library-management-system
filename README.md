@@ -1,9 +1,10 @@
 # Library Management System - Backend
 
 Live URl =  https://library-management-system-huh0.onrender.com/
+
 ## Overview
 
-The **Library Management System** is a RESTful backend application built using **Node.js**, **Express.js**, and **Neon PostgreSQL**. It provides secure authentication using JWT, role-based authorization, book management, member management, and book borrowing/return functionality.
+The **Library Management System** is a RESTful backend application built using **Node.js**, **Express.js**, and **Neon PostgreSQL**. It provides secure authentication, role-based authorization, book management, member management, and borrowing functionality.
 
 The application supports two user roles:
 
@@ -16,18 +17,59 @@ The application supports two user roles:
 
 * Node.js
 * Express.js
-* PostgreSQL (Neon)
+* Neon PostgreSQL
+* pg
 * JWT (JSON Web Token)
 * bcryptjs
-* pg
 * dotenv
 * cors
 
 ---
 
+# Features
+
+## Authentication
+
+* Member Registration
+* User Login
+* Password Hashing using bcrypt
+* JWT Authentication
+
+---
+
+## Authorization
+
+### Librarian
+
+* Add Books
+* View Books
+* View Book Details
+* Update Books
+* Delete Books
+* View Members
+* Delete Members
+
+### Member
+
+* View Books
+* Borrow Books
+* Return Books
+* View My Borrowed Books
+
+---
+
+# Bonus Features
+
+* Pagination
+* Search Books by Title
+* Search Books by Author
+* Filter Books by Category
+
+---
+
 # Project Structure
 
-```
+```text
 library-management-system
 │
 ├── src
@@ -41,6 +83,7 @@ library-management-system
 │   │     memberController.js
 │   │
 │   ├── database
+│   │     db.js
 │   │     schema.sql
 │   │
 │   ├── middleware
@@ -62,45 +105,12 @@ library-management-system
 ├── .env
 ├── .gitignore
 ├── package.json
-├── package-lock.json
 └── server.js
 ```
 
 ---
 
-# Features
-
-## Authentication
-
-* Member Registration
-* User Login
-* Password Hashing using bcrypt
-* JWT Authentication
-
----
-
-## Role-Based Authorization
-
-### Librarian
-
-* Add Book
-* View Books
-* View Book Details
-* Update Book
-* Delete Book
-* View Members
-* Delete Members
-
-### Member
-
-* View Books
-* Borrow Book
-* Return Book
-* View Borrowed Books
-
----
-
-# Database Schema
+# Database Tables
 
 ## Users
 
@@ -151,7 +161,7 @@ Clone the repository
 git clone <repository-url>
 ```
 
-Move into the project
+Navigate to the project
 
 ```bash
 cd library-management-system
@@ -163,19 +173,17 @@ Install dependencies
 npm install
 ```
 
-Create a `.env` file.
-
-Example
+Create a `.env` file
 
 ```env
 PORT=5000
 
-DATABASE_URL=your_neon_postgresql_connection_string
+DATABASE_URL=your_neon_database_url
 
 JWT_SECRET=your_secret_key
 ```
 
-Run the server
+Run the project
 
 ```bash
 npm run dev
@@ -184,21 +192,19 @@ npm run dev
 Server
 
 ```
- https://library-management-system-huh0.onrender.com/
+http://localhost:5000
 ```
 
 ---
 
 # Authentication
 
-Login API returns a JWT token.
+Login returns a JWT token.
 
-Use the token in every protected API.
+Include the token in protected APIs.
 
 ```
-Authorization
-
-Bearer <JWT_TOKEN>
+Authorization: Bearer <JWT_TOKEN>
 ```
 
 ---
@@ -207,123 +213,81 @@ Bearer <JWT_TOKEN>
 
 ## Authentication
 
-### Register
-
-```
-POST /api/auth/register
-```
-
-### Login
-
-```
-POST /api/auth/login
-```
+| Method | Endpoint           | Access |
+| ------ | ------------------ | ------ |
+| POST   | /api/auth/register | Public |
+| POST   | /api/auth/login    | Public |
 
 ---
 
 ## Books
 
-### Add Book
-
-```
-POST /api/books
-```
-
-(Librarian)
-
----
-
-### Get All Books
-
-```
-GET /api/books
-```
-
-(Member & Librarian)
-
----
-
-### Get Book By ID
-
-```
-GET /api/books/:id
-```
-
-(Member & Librarian)
-
----
-
-### Update Book
-
-```
-PUT /api/books/:id
-```
-
-(Librarian)
-
----
-
-### Delete Book
-
-```
-DELETE /api/books/:id
-```
-
-(Librarian)
+| Method | Endpoint       | Access            |
+| ------ | -------------- | ----------------- |
+| POST   | /api/books     | Librarian         |
+| GET    | /api/books     | Member, Librarian |
+| GET    | /api/books/:id | Member, Librarian |
+| PUT    | /api/books/:id | Librarian         |
+| DELETE | /api/books/:id | Librarian         |
 
 ---
 
 ## Members
 
-### Get Members
-
-```
-GET /api/members
-```
-
-(Librarian)
-
----
-
-### Delete Member
-
-```
-DELETE /api/members/:id
-```
-
-(Librarian)
+| Method | Endpoint         | Access    |
+| ------ | ---------------- | --------- |
+| GET    | /api/members     | Librarian |
+| DELETE | /api/members/:id | Librarian |
 
 ---
 
 ## Borrow
 
-### Borrow Book
-
-```
-POST /api/books/:id/borrow
-```
-
-(Member)
+| Method | Endpoint              | Access |
+| ------ | --------------------- | ------ |
+| POST   | /api/books/:id/borrow | Member |
+| POST   | /api/books/:id/return | Member |
+| GET    | /api/books/my/books   | Member |
 
 ---
 
-### Return Book
+# Pagination
+
+Retrieve books page by page.
 
 ```
-POST /api/books/:id/return
+GET /api/books?page=1&limit=10
 ```
-
-(Member)
 
 ---
 
-### My Borrowed Books
+# Search Books
+
+Search by title or author.
 
 ```
-GET /api/books/my/books
+GET /api/books?search=atomic
 ```
 
-(Member)
+```
+GET /api/books?search=james
+```
+
+---
+
+# Filter by Category
+
+```
+GET /api/books?category=Programming
+```
+
+---
+
+# Combined Example
+
+```
+GET /api/books?page=1&limit=5&search=clean&category=Programming
+```
 
 ---
 
@@ -332,14 +296,14 @@ GET /api/books/my/books
 ## Registration
 
 * Users can register only as **Member**.
-* Librarians are added directly into the database.
+* Librarian accounts are inserted directly into the database.
 
 ---
 
 ## Borrow Book
 
 * Book must exist.
-* Book should be available.
+* Book must be available.
 * Member cannot borrow the same book twice without returning it.
 * Available quantity decreases after borrowing.
 
@@ -347,7 +311,7 @@ GET /api/books/my/books
 
 ## Return Book
 
-* Member can only return borrowed books.
+* Member can only return books they have borrowed.
 * Available quantity increases after returning.
 * Borrow record status changes to **returned**.
 
@@ -355,7 +319,7 @@ GET /api/books/my/books
 
 ## Book Management
 
-Only Librarians can
+Only Librarians can:
 
 * Add Books
 * Update Books
@@ -365,22 +329,10 @@ Only Librarians can
 
 ## Member Management
 
-Only Librarians can
+Only Librarians can:
 
 * View Members
 * Delete Members
-
----
-
-# Environment Variables
-
-```
-PORT
-
-DATABASE_URL
-
-JWT_SECRET
-```
 
 ---
 
@@ -398,28 +350,29 @@ JWT_SECRET
 
 ---
 
-# Future Improvements
-
-* Request Validation
-* Pagination
-* Search Books
-* Category Filter
-* Refresh Token Authentication
-* Database Transactions for Borrow/Return Operations
-
----
-
 # API Testing
 
-The APIs were tested using **Postman**.
+All APIs were tested using **Postman**.
 
 ---
 
 # Deployment
 
-Backend is deployed using:
+The application is deployed on:
 
 * Render
+
+---
+
+# Future Enhancements
+
+* Request Validation using express-validator
+* Refresh Token Authentication
+* Soft Delete
+* Audit Logs
+* Database Transactions
+* Rate Limiting
+* Swagger/OpenAPI Documentation
 
 ---
 

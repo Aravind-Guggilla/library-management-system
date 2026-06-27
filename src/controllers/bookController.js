@@ -24,14 +24,21 @@ const createBook = async (request, response) => {
 };
 
 const fetchAllBooks = async (request, response) => {
-    try{
-        const books = await getAllBooks()
-        response.status(200).json(books)
-    }catch(error){
+
+    try {
+
+        const {page = 1, limit = 10, search = "", category = ""} = request.query;
+   
+        const books = await getAllBooks(Number(page), Number(limit), search, category);
+
+        response.status(200).json(books);
+
+    } catch (error) {
+        console.log(error)
         response.status(500).json({error: "Internal Server Error"});
     }
-    
-}
+
+};
 
 const fetchBookById = async (request, response) =>{
 

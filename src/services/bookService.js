@@ -47,19 +47,29 @@ const addBook = async (bookDetails) => {
     return result.rows[0];
 };
 
-const getAllBooks = async () => {
-
+const getAllBooks = async (page, limit, search, category) => {
     const db = getDB();
+    const offset = (page - 1) * limit
 
-    const query = `
-        SELECT 
-           *
-        FROM 
-            books
-        ORDER BY id;
-    `;
+    const query  = `
+    SELECT 
+      * 
+    FROM 
+        books
+    WHERE
+        ($1 = '' OR title ILIKE '%' || $1 || '%' OR author ILIKE '%' || $1 || '%')
+    AND 
+        ($2 = '' OR category ILIKE '%' || $2 || '%')
+    ORDER BY 
+        id
+    LIMIT 
+        $3
+    OFFSET 
+        $4;`
 
-    const result = await db.query(query);
+    const values = [search, category, limit, offset];
+
+    const result = await db.query(query, values);
 
     return result.rows;
 };
